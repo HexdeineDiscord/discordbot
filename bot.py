@@ -20,6 +20,7 @@ async def on_member_join(member):
         await channelGeneral.send(f'welcome, {member}')
 
 @client.command()
+@commands.cooldown(1, 60*5, commands.BucketType.member)
 async def gaydar(ctx, member: discord.Member):
     gayRole = discord.utils.get(ctx.guild.roles, name="gay")
     if gayRole:
@@ -43,10 +44,11 @@ async def gaydar(ctx, member: discord.Member):
     else:
         await ctx.send(f'{member.mention} is not gay')
 
-@client.command()
-async def test(ctx):
-    async for m in ctx.guild.fetch_members():
-        print(m)
+@gaydar.error
+async def gaydar_error(ctx, error):
+    if isinstance(error, commands.CommandOnCooldown):
+        await ctx.send(f'This command is on cooldown, wait {error.retry_after:,.2f} seconds.')
+
 
 access_token= os.environ["ACCESS_TOKEN"]
 client.run(access_token)
