@@ -43,4 +43,4 @@ async def gaydar(ctx, member: discord.Member):
         await ctx.send(f'{member.mention} is not gay')
 
 access_token= os.environ["ACCESS_TOKEN"]
-client.run('NzYwNTE5MzkxMjgzNTExMzM3.X3NO4A.gYY8o5S3HJP2MLakhlRM-wOtuoc')
+client.run('access_token')
