@@ -30,7 +30,7 @@ async def gaydar(ctx, member: discord.Member):
 
     role = discord.utils.get(ctx.guild.roles, name='gay')
     GayCheckInt = random.randint(0, 99)
-    if GayCheckInt <= 100:
+    if GayCheckInt <= 40:
         gayRole 
         async for m in ctx.guild.fetch_members():    
             try:
