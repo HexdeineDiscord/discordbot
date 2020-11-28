@@ -32,4 +32,4 @@ async def gaydar(ctx, member: discord.Member):
 
 
 
-client.run('NzYwNTE5MzkxMjgzNTExMzM3.X3NO4A.JRx4_KRk9ENM9ejx6LNkh7Iw6c0')
+client.run('token')
