@@ -31,9 +31,10 @@ async def gaydar(ctx, member: discord.Member):
     GayCheckInt = random.randint(0, 99)
     if GayCheckInt <= 100:
         gayRole 
-        for m in ctx.guild.members:    
+        async for m in ctx.guild.fetch_members():    
             try:
                 await m.remove_roles(gayRole)
+                print(m)
             except:
                 print(f"Couldn't remove roles from {m}")
 
@@ -42,5 +43,10 @@ async def gaydar(ctx, member: discord.Member):
     else:
         await ctx.send(f'{member.mention} is not gay')
 
+@client.command()
+async def test(ctx):
+    async for m in ctx.guild.fetch_members():
+        print(m)
+
 access_token= os.environ["ACCESS_TOKEN"]
-client.run('NzYwNTE5MzkxMjgzNTExMzM3.X3NO4A.gYY8o5S3HJP2MLakhlRM-wOtuoc')
+client.run(access_token)
