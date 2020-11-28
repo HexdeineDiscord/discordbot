@@ -19,18 +19,28 @@ async def on_member_join(member):
     else:
         await channelGeneral.send(f'welcome, {member}')
 
-
 @client.command()
 async def gaydar(ctx, member: discord.Member):
+    gayRole = discord.utils.get(ctx.guild.roles, name="gay")
+    if gayRole:
+        print('role already exists')
+    else:
+        await ctx.guild.create_role(name="gay", colour=discord.Colour(0xf500ff)) 
+
     role = discord.utils.get(ctx.guild.roles, name='gay')
     GayCheckInt = random.randint(0, 99)
+    if GayCheckInt <= 100:
+        gayRole 
+        for m in ctx.guild.members:    
+            try:
+                await m.remove_roles(gayRole)
+            except:
+                print(f"Couldn't remove roles from {m}")
 
-    if GayCheckInt <= 25:
         await ctx.send(f'{member.mention} is gay, unfortunately')
         await member.add_roles(role)
     else:
         await ctx.send(f'{member.mention} is not gay')
 
-
 access_token= os.environ["ACCESS_TOKEN"]
-client.run(access_token)
+client.run('NzYwNTE5MzkxMjgzNTExMzM3.X3NO4A.gYY8o5S3HJP2MLakhlRM-wOtuoc')
