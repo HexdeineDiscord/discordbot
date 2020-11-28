@@ -20,7 +20,7 @@ async def on_member_join(member):
         await channelGeneral.send(f'welcome, {member}')
 
 @client.command()
-@commands.cooldown(1, 60*5, commands.BucketType.member)
+@commands.cooldown(1, 60, commands.BucketType.member)
 async def gaydar(ctx, member: discord.Member):
     gayRole = discord.utils.get(ctx.guild.roles, name="gay")
     if gayRole:
