@@ -1,5 +1,6 @@
 import discord
 import random
+import os
 from discord.ext import commands
 
 client = commands.Bot(command_prefix = "-")
@@ -31,5 +32,5 @@ async def gaydar(ctx, member: discord.Member):
         await ctx.send(f'{member.mention} is not gay')
 
 
-
-client.run('token')
+access_token= os.environ["ACCESS_TOKEN"]
+client.run(access_token)
