@@ -3,8 +3,10 @@ import random
 import os
 from discord.ext import commands
 
-client = commands.Bot(command_prefix = "-")
+prefix = "_"
+client = commands.Bot(command_prefix = prefix)
 channelGeneral = client.get_channel(782072089662193677)
+cooldownTime = "60"
 
 @client.event
 async def on_ready():
@@ -20,7 +22,7 @@ async def on_member_join(member):
         await channelGeneral.send(f'welcome, {member}')
 
 @client.command()
-@commands.cooldown(1, 60, commands.BucketType.member)
+@commands.cooldown(1, cooldownTime, commands.BucketType.member)
 async def gaydar(ctx, member: discord.Member):
     gayRole = discord.utils.get(ctx.guild.roles, name="gay")
     if gayRole:
@@ -43,6 +45,12 @@ async def gaydar(ctx, member: discord.Member):
         await member.add_roles(role)
     else:
         await ctx.send(f'{member.mention} is not gay')
+
+@client.command()
+async def help(ctx):
+    ctx.send(
+        '```{prefix}gaydar <user> - checks if the specified user is gay (can only be used once every {cooldownTime} seconds)\n{prefix}help - displays this message```'
+    )
 
 @gaydar.error
 async def gaydar_error(ctx, error):
