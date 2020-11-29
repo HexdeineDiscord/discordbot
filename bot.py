@@ -1,25 +1,57 @@
 import discord
 import random
 import os
+import json
 from discord.ext import commands
 
-prefix = "_"
-client = commands.Bot(command_prefix = prefix)
-channelGeneral = client.get_channel(782072089662193677)
 cooldownTime = "60"
+
+def get_prefix(client, message):
+    with open('prefixes.json', 'r') as f:
+        prefixes = json.load(f)
+    return prefixes[str(message.guild.id)]
+
+client = commands.Bot(command_prefix = get_prefix)
+
+
 
 @client.event
 async def on_ready():
     print("I smell a gay")
 
 @client.event
-async def on_member_join(member):
-    GayInt = random.randint(0, 9)
-    if GayInt <= 3:
-        await channelGeneral.send(f'{member} is gay')
+async def on_guild_join(guild):
+    with open('prefixes.json', 'r') as f:
+        prefixes = json.load(f)
+    prefixes[str(guild.id)] = '_'
     
-    else:
-        await channelGeneral.send(f'welcome, {member}')
+    with open('prefixes.json', 'w') as f:
+        json.dump(prefixes, f, indent = 4)
+
+@client.event
+async def on_guild_remove(guild):
+    with open('prefixes.json', 'r') as f:
+        prefixes = json.load(f)
+    prefixes.pop(str(guild.id))
+    
+    with open('prefixes.json', 'w') as f:
+        json.dump(prefixes, f, indent = 4)
+
+
+
+@client.command()
+async def gaydarprefix(ctx, prefix):
+    try:
+        with open('prefixes.json', 'r') as f:
+            prefixes = json.load(f)
+        prefixes[str(ctx.guild.id)] = prefix
+        
+        with open('prefixes.json', 'w') as f:
+            json.dump(prefixes, f, indent = 4)
+
+        await ctx.send(f'Prefix set to `{prefix}` successfully!')
+    except:
+        await ctx.send('There has been an error setting the prefix, please try again later <3')
 
 @client.command()
 @commands.cooldown(1, cooldownTime, commands.BucketType.member)
@@ -46,16 +78,13 @@ async def gaydar(ctx, member: discord.Member):
     else:
         await ctx.send(f'{member.mention} is not gay')
 
-@client.command()
-async def help(ctx):
-    ctx.send(
-        '```{prefix}gaydar <user> - checks if the specified user is gay (can only be used once every {cooldownTime} seconds)\n{prefix}help - displays this message```'
-    )
+
 
 @gaydar.error
 async def gaydar_error(ctx, error):
     if isinstance(error, commands.CommandOnCooldown):
         await ctx.send(f'This command is on cooldown, wait {error.retry_after:,.2f} seconds.')
+
 
 
 access_token= os.environ["ACCESS_TOKEN"]
