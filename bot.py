@@ -7,9 +7,12 @@ from discord.ext import commands
 cooldownTime = "60"
 
 def get_prefix(client, message):
-    with open('prefixes.json', 'r') as f:
-        prefixes = json.load(f)
-    return prefixes[str(message.guild.id)]
+    try:
+        with open('prefixes.json', 'r') as f:
+            prefixes = json.load(f)
+        return prefixes[str(message.guild.id)]
+    except:
+        return '--'
 
 client = commands.Bot(command_prefix = get_prefix)
 
