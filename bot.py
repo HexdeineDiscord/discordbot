@@ -118,5 +118,5 @@ async def gaydar_error(ctx, error):
 
 
 
-#access_token= os.environ["ACCESS_TOKEN"]
-client.run('NzYwNTE5MzkxMjgzNTExMzM3.X3NO4A.UFuR6BWUtVkmJnCaphBlbK6z8d8')
+access_token= os.environ["ACCESS_TOKEN"]
+client.run(access_token)
