@@ -1,10 +1,8 @@
-import discord
-import random
-import os
-import json
+import discord, asyncio, random, os, json
 from discord.ext import commands
 
 cooldownTime = "60"
+vibeFailTime = "5"
 
 def get_prefix(client, message):
     try:
@@ -14,7 +12,11 @@ def get_prefix(client, message):
     except:
         return '--'
 
-client = commands.Bot(command_prefix = get_prefix)
+help_command = commands.DefaultHelpCommand(
+    no_category = 'Commands'
+)
+
+client = commands.Bot(command_prefix = get_prefix, help_command = help_command)
 
 
 
@@ -42,7 +44,7 @@ async def on_guild_remove(guild):
 
 
 
-@client.command()
+@client.command(brief = 'Change GayBot\'s command prefix', description = 'Change GayBot\'s command prefix; currently doesn\'t work :(')
 async def gaydarprefix(ctx, prefix):
     try:
         with open('prefixes.json', 'r') as f:
@@ -56,14 +58,13 @@ async def gaydarprefix(ctx, prefix):
     except:
         await ctx.send('There has been an error setting the prefix, please try again later <3')
 
-@client.command()
+@client.command(brief="Gay check a friend", description=f"The bot checks if the specified member is gay, can only be used once every {cooldownTime} seconds")
 @commands.cooldown(1, cooldownTime, commands.BucketType.member)
 async def gaydar(ctx, member: discord.Member):
     gayRole = discord.utils.get(ctx.guild.roles, name="gay")
-    if gayRole:
-        print('role already exists')
-    else:
-        await ctx.guild.create_role(name="gay", colour=discord.Colour(0xf500ff)) 
+    if not gayRole:
+       await ctx.guild.create_role(name="gay", colour=discord.Colour(0xf500ff)) 
+       print('\'gay\' role created')
 
     role = discord.utils.get(ctx.guild.roles, name='gay')
     GayCheckInt = random.randint(0, 99)
@@ -81,6 +82,25 @@ async def gaydar(ctx, member: discord.Member):
     else:
         await ctx.send(f'{member.mention} is not gay')
 
+@client.command(brief = 'Vibe checks the specified user', desription = f'Vibe checks the specified user, if they fail they get server muted for {vibeFailTime} seconds')
+async def vibecheck(ctx, member: discord.Member):
+    failureRole = discord.utils.get(ctx.guild.roles, name="failure")
+    if not failureRole:
+       await ctx.guild.create_role(name="failure", colour=discord.Colour(0xe60505)) 
+       print('\'failure\' role created')
+    vibecheckrand = random.randint(0, 2)
+    
+    if vibecheckrand <= 1:
+        await ctx.send(f'{member.mention} passed the vibe check. Congratulations.')
+    else:
+        role = discord.utils.get(ctx.guild.roles, name="failure")
+        await member.add_roles(role)
+        await member.edit(mute = True)
+        await ctx.send(f'{member.mention} failed the vibe check, they have been muted for {vibeFailTime} seconds')
+
+        await asyncio.sleep(int(vibeFailTime))
+        await member.edit(mute = False)
+        await member.remove_roles(role)
 
 
 @gaydar.error
