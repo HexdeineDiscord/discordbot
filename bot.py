@@ -33,6 +33,18 @@ async def on_guild_join(guild):
     with open('prefixes.json', 'w') as f:
         json.dump(prefixes, f, indent = 4)
 
+    gayRole = discord.utils.get(guild.roles, name="gay")
+    if not gayRole:
+       await guild.create_role(name="gay", colour=discord.Colour(0xf500ff)) 
+       print('\'gay\' role created')
+
+    failureRole = discord.utils.get(guild.roles, name="failure")
+    if not failureRole:
+       await guild.create_role(name="failure", colour=discord.Colour(0xe60505)) 
+       print('\'failure\' role created')
+
+    
+
 @client.event
 async def on_guild_remove(guild):
     with open('prefixes.json', 'r') as f:
@@ -61,19 +73,12 @@ async def gaydarprefix(ctx, prefix):
 @client.command(brief="Gay check a friend", description=f"The bot checks if the specified member is gay, can only be used once every {cooldownTime} seconds")
 @commands.cooldown(1, cooldownTime, commands.BucketType.member)
 async def gaydar(ctx, member: discord.Member):
-    gayRole = discord.utils.get(ctx.guild.roles, name="gay")
-    if not gayRole:
-       await ctx.guild.create_role(name="gay", colour=discord.Colour(0xf500ff)) 
-       print('\'gay\' role created')
-
     role = discord.utils.get(ctx.guild.roles, name='gay')
     GayCheckInt = random.randint(0, 99)
     if GayCheckInt <= 40:
-        gayRole 
         async for m in ctx.guild.fetch_members():    
             try:
-                await m.remove_roles(gayRole)
-                print(m)
+                await m.remove_roles(role)
             except:
                 print(f"Couldn't remove roles from {m}")
 
@@ -84,10 +89,6 @@ async def gaydar(ctx, member: discord.Member):
 
 @client.command(brief = 'Vibe checks the specified user', desription = f'Vibe checks the specified user, if they fail they get server muted for {vibeFailTime} seconds')
 async def vibecheck(ctx, member: discord.Member):
-    failureRole = discord.utils.get(ctx.guild.roles, name="failure")
-    if not failureRole:
-       await ctx.guild.create_role(name="failure", colour=discord.Colour(0xe60505)) 
-       print('\'failure\' role created')
     vibecheckrand = random.randint(0, 2)
     
     if vibecheckrand <= 1:
@@ -117,5 +118,5 @@ async def gaydar_error(ctx, error):
 
 
 
-access_token= os.environ["ACCESS_TOKEN"]
-client.run(access_token)
+#access_token= os.environ["ACCESS_TOKEN"]
+client.run('NzYwNTE5MzkxMjgzNTExMzM3.X3NO4A.UFuR6BWUtVkmJnCaphBlbK6z8d8')
