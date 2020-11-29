@@ -104,7 +104,7 @@ async def vibecheck(ctx, member: discord.Member):
             await member.remove_roles(role)
         except:
             await member.add_roles(role)
-            await ctx.send(f'{member.mention} failed the vibe check, they have been muted for {vibeFailTime} seconds')
+            await ctx.send(f'{member.mention} failed the vibe check, what a failure')
 
             await asyncio.sleep(int(vibeFailTime))
             await member.remove_roles(role)
