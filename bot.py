@@ -94,13 +94,20 @@ async def vibecheck(ctx, member: discord.Member):
         await ctx.send(f'{member.mention} passed the vibe check. Congratulations.')
     else:
         role = discord.utils.get(ctx.guild.roles, name="failure")
-        await member.add_roles(role)
-        await member.edit(mute = True)
-        await ctx.send(f'{member.mention} failed the vibe check, they have been muted for {vibeFailTime} seconds')
+        try:
+            await member.add_roles(role)
+            await member.edit(mute = True)
+            await ctx.send(f'{member.mention} failed the vibe check, they have been muted for {vibeFailTime} seconds')
 
-        await asyncio.sleep(int(vibeFailTime))
-        await member.edit(mute = False)
-        await member.remove_roles(role)
+            await asyncio.sleep(int(vibeFailTime))
+            await member.edit(mute = False)
+            await member.remove_roles(role)
+        except:
+            await member.add_roles(role)
+            await ctx.send(f'{member.mention} failed the vibe check, they have been muted for {vibeFailTime} seconds')
+
+            await asyncio.sleep(int(vibeFailTime))
+            await member.remove_roles(role)
 
 
 @gaydar.error
